@@ -1,5 +1,39 @@
 <?php
-   print_r($_POST);
+
+print_r($_POST);
+
+session_start();
+
+
+
+if (empty($_SESSION["Username"] or empty($_SESSION["Passowrd"]))) {
+    //header("Location: Admin.php");
+    echo "NOT LOGGED IN, BACK TO LOGIN PAGE";
+}
+
+/*
+$ID = $_SESSION["ID"];
+
+// Connect to mysql
+$mysqli = new mysqli("localhost","root","","creator");
+
+$sql = "SELECT * FROM profiles";
+$result = $mysqli -> query($sql);
+
+while ($row = $result -> fetch_assoc()) {
+    $userID = $row["ID"];
+}
+
+$sql = "";
+
+$stmt = $mysqli -> prepare($sql);
+
+$stmt -> bind_param("ss", $type, $val);
+
+$stmt -> execute();
+
+$stmt -> close();
+*/
 ?>
 
 
