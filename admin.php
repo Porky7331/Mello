@@ -1,7 +1,5 @@
-<?php ?>
-
 <?php
-   #print_r($_POST);
+   print_r($_POST);
 ?>
 
 
@@ -18,17 +16,19 @@
 <body>
     <div>    
         <form method="POST" action="admin.php">       
-            <!-- Make loop for each (competition) -->
-        <label>1<input type="radio" name="Comp"></label><br>
-        <label>2<input type="radio" name="Comp"></label><br>
+        <label>1<input type="radio" name="comp" value="1" checked></label><br>
+        <label>2<input type="radio" name="comp" value="2"></label><br>
+        <label>3<input type="radio" name="comp" value="3"></label><br>
+        <label>4<input type="radio" name="comp" value="4"></label><br>
+        <label>5<input type="radio" name="comp" value="5"></label><br>
+        <input type="hidden" name="request" Value="newComp">
         <input type="submit" value="Update">
-        <input type="hidden" name="showComp" Value=1>
         </form>
     </div>
 
     <div>
         <?php 
-        if(isset($_POST["showComp"])){
+        if(!empty($_POST["request"])){
             
             echo('<form method="POST" action="admin.php">');
             
@@ -37,7 +37,6 @@
 
             echo('<input type="submit" value="Update"> ');
             echo('</form>');
-        
          } 
          ?>
         
