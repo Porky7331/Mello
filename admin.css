@@ -1,0 +1,7 @@
+body div {
+    width: 33%;
+}
+body{
+    display: flex;
+    flex-direction: row;
+}
