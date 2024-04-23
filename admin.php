@@ -1,5 +1,9 @@
 <?php
 
+echo "<br>Post: ";
+print_r($_POST);
+
+
 function Clamp($val = 0, $min=0, $max=1)
 {
     if ($val > $max) {
@@ -9,7 +13,6 @@ function Clamp($val = 0, $min=0, $max=1)
     }
     return $val;
 }
-//print_r($_POST);
 
 session_start();
 $_SESSION["Username"] = "admin";
@@ -38,6 +41,7 @@ if (empty($account)){
     //print_r($account);
 }
 
+
 // Fill competition table with a limit of 5 competitions.
 $sql = "SELECT * FROM competition";
 $result = $mysqli -> query($sql);
@@ -48,11 +52,12 @@ for ($i = 0; $i < $toAdd; $i++){
     $mysqli -> query($sql);
 }
 
+
 // Get the index of which competition
 $comp = 1;
 if (!empty($_POST["comp"])){
     $comp = intval($_POST["comp"]);
-    echo "comp $comp <br>";
+    echo "<br><br>Competition index: $comp";
 }
 $comp = Clamp($comp, 1, 5);
 
@@ -62,6 +67,7 @@ $stmt -> bind_param("i", $comp);
 $stmt -> execute();
 $competition = $stmt -> get_result() -> fetch_assoc();
 //echo empty($competition);
+echo "<br><br>Competition Array:<br>";
 print_r($competition);
 
 if ( empty($competition) ) {
@@ -110,30 +116,28 @@ $stmt -> close();
 <body>
     <div>    
         <form method="POST" action="admin.php">       
-        <label>1<input type="radio" name="comp" value="1" checked></label><br>
-        <label>2<input type="radio" name="comp" value="2" <?php if($comp == 2){echo "checked";} ?>></label><br>
-        <label>3<input type="radio" name="comp" value="3" <?php if($comp == 3){echo "checked";} ?>></label><br>
-        <label>4<input type="radio" name="comp" value="4" <?php if($comp == 4){echo "checked";} ?>></label><br>
-        <label>5<input type="radio" name="comp" value="5" <?php if($comp == 5){echo "checked";} ?>></label><br>
-        <input type="hidden" name="request" Value="newComp">
-        <input type="submit" value="Update">
+            <label>1<input type="radio" name="comp" value="1" checked></label><br>
+            <label>2<input type="radio" name="comp" value="2" <?php if($comp == 2){echo "checked";} ?>></label><br>
+            <label>3<input type="radio" name="comp" value="3" <?php if($comp == 3){echo "checked";} ?>></label><br>
+            <label>4<input type="radio" name="comp" value="4" <?php if($comp == 4){echo "checked";} ?>></label><br>
+            <label>5<input type="radio" name="comp" value="5" <?php if($comp == 5){echo "checked";} ?>></label><br>
+            <input type="hidden" name="request" Value="newComp">
+            <input type="submit" value="Update">
+        </form>
+        <form action="POST" action="admin.php">
+            <input type="hidden" value="<?php echo "$comp"; ?>" name="comp">
+            <label>Song Name<input type="text" name="SongName" checked></label><br>
         </form>
     </div>
 
     <div>
-        
-        
-            
         <form method="POST" action="admin.php">
         
             # <!-- Make loop for each (partician) -->
         <label>Text<input type="radio" name="Value"></label><br>
 
         <input type="submit" value="Update">
-        </form>'
-         
-         
-        
+        </form>
 
     </div>
 
