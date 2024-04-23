@@ -1,7 +1,17 @@
-body div {
-    width: 33%;
-}
 body{
     display: flex;
     flex-direction: row;
+}
+
+body div {
+    width: 33%;
+    background-color: rgb(219, 219, 219);
+}
+
+body div:first-of-type {
+    background-color: rgb(201, 201, 201);
+}
+
+body div:last-of-type {
+    background-color: rgb(201, 201, 201);
 }

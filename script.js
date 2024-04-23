@@ -13,3 +13,4 @@ if (mobile) {
     element.style.width = "90%";
 });
 }
+
