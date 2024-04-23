@@ -8,13 +8,14 @@ body{
 }
 
 #container {
-    background-color: green;
+    background-color: rgba(131, 131, 131, 0.622);
     height: 45%;
-    border: 5px solid;
     margin: auto;
     width: 45%;
     padding: 3% 1%;
     border-radius: 15%;
+    border-style:solid;
+    border-width: 10px;
 }
 form{
     height: 100%;
@@ -53,4 +54,7 @@ width: 75%;
 #melotitle img{
     width: 100%;
     height: auto;
+}
+.rainbow-border{
+    border-image: linear-gradient(to right, rgba(9,170,224,255),rgba(130,80,159,255) , rgba(235,55,145,255) , rgba(249,90,40,255), rgba(255,159,0,255)) 1;
 }
