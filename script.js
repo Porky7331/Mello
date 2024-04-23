@@ -1,3 +1,4 @@
+
 function showCompetition(part = 1){
     console.log("hello", part);
 }
@@ -11,5 +12,5 @@ if (mobile) {
     var artistCards = [...document.getElementsByClassName("artist-card")];
     artistCards.forEach(element => {
     element.style.width = "90%";
-});
-}
+}); 
+}        
