@@ -15,7 +15,7 @@ body{
     padding: 3% 1%;
     border-radius: 15%;
     border-style:solid;
-    border-width: 10px;
+    border-width: 2px;
 }
 form{
     height: 100%;
@@ -56,5 +56,9 @@ width: 75%;
     height: auto;
 }
 .rainbow-border{
+    /*Doesent work with border-radius */ 
     border-image: linear-gradient(to right, rgba(9,170,224,255),rgba(130,80,159,255) , rgba(235,55,145,255) , rgba(249,90,40,255), rgba(255,159,0,255)) 1;
+}
+.rainbow-background{
+    background-image: linear-gradient(to right, rgba(9,170,224,255),rgba(130,80,159,255) , rgba(235,55,145,255) , rgba(249,90,40,255), rgba(255,159,0,255));
 }
