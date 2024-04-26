@@ -66,13 +66,28 @@ $stmt = $mysqli -> prepare($sql);
 $stmt -> bind_param("i", $comp);
 $stmt -> execute();
 $competition = $stmt -> get_result() -> fetch_assoc();
+$ID = $competition["ID"];
 //echo empty($competition);
 echo "<br><br>Competition Array:<br>";
 print_r($competition);
 
-if ( empty($competition) ) {
-    //echo 'Zero';
+
+if (isset($_POST["request"])) {
+    if ($_POST["request"] == "updateComp"){
+        $StartTime = isset($_POST["StartTime"]) ? $_POST["StartTime"] : 0;
+        $EndTime = isset($_POST["EndTime"]) ? $_POST["EndTime"] : 0;
+        $Location = isset($_POST["Location"]) ? $_POST["Location"] : "";
+
+        $sql = "UPDATE `competition` SET `StartTime`=?, `EndTime`=?, `Location`=? WHERE ID=$ID";
+        $stmt = $mysqli -> prepare($sql);
+        $stmt -> bind_param("sss", $StartTime, $EndTime, $Location);
+        $stmt -> execute();
+    }
 }
+
+$StartTime = isset($StartTime) ? $StartTime : $competition["StartTime"];
+$EndTime = isset($EndTime) ? $EndTime : $competition["EndTime"];
+$Location = isset($Location) ? $Location : $competition["Location"];
 
 $stmt -> close();
 /*
@@ -114,37 +129,52 @@ $stmt -> close();
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-    <div>    
-        <form method="POST" action="admin.php">       
-            <label>1<input type="radio" name="comp" value="1" checked></label><br>
-            <label>2<input type="radio" name="comp" value="2" <?php if($comp == 2){echo "checked";} ?>></label><br>
-            <label>3<input type="radio" name="comp" value="3" <?php if($comp == 3){echo "checked";} ?>></label><br>
-            <label>4<input type="radio" name="comp" value="4" <?php if($comp == 4){echo "checked";} ?>></label><br>
-            <label>5<input type="radio" name="comp" value="5" <?php if($comp == 5){echo "checked";} ?>></label><br>
+    <div>
+        <h4>Competition:</h4>
+        <form method="POST" action="admin.php"> 
             <input type="hidden" name="request" Value="newComp">
+            <label><input type="radio" name="comp" value="1" checked></label>1<br>
+            <label><input type="radio" name="comp" value="2" <?php if($comp == 2){echo "checked";} ?>>2</label><br>
+            <label><input type="radio" name="comp" value="3" <?php if($comp == 3){echo "checked";} ?>>3</label><br>
+            <label><input type="radio" name="comp" value="4" <?php if($comp == 4){echo "checked";} ?>>4</label><br>
+            <label><input type="radio" name="comp" value="5" <?php if($comp == 5){echo "checked";} ?>>5</label><br>
+            <input type="submit" value="Choose">
+        </form>
+
+        <h4>Edit competition <?php echo "$comp"; ?>:</h4>
+        <form method="POST" action="admin.php">
+            <input type="hidden" name="request" Value="updateComp">
+            <input type="hidden" value="<?php echo "$comp"; ?>" name="comp">
+
+            <label>Start Time<br><input type="text" name="StartTime" value="<?php echo "$StartTime"; ?>" required></label><br><br>
+            <label>End Time<br><input type="text" name="EndTime" value="<?php echo "$EndTime"; ?>" required></label><br><br>
+            <label>Location<br><input type="text" name="Location" value="<?php echo "$Location"; ?>"required></label><br><br>
             <input type="submit" value="Update">
         </form>
-        <form action="POST" action="admin.php">
-            <input type="hidden" value="<?php echo "$comp"; ?>" name="comp">
-            <label>Song Name<input type="text" name="SongName" checked></label><br>
+    </div>
+
+    <div>
+        <h3>Songs:</h3>
+        <form method="POST" action="admin.php"> 
+            <input type="hidden" name="request" Value="updateComp">
+            <label><input type="radio" name="song" value="1" checked require>Hela världen längtar</label><br>
+            <label><input type="radio" name="song" value="2" <?php if($comp == 2){echo "checked";} ?> require>Guld och gröna skogar</label><br>
+            <label><input type="radio" name="song" value="3" <?php if($comp == 3){echo "checked";} ?> require>Euphoria</label><br>
+            <input type="submit" value="Choose">
         </form>
     </div>
 
     <div>
-        <form method="POST" action="admin.php">
-        
-            # <!-- Make loop for each (partician) -->
-        <label>Text<input type="radio" name="Value"></label><br>
+        <h3>Edit song:</h3>
+        <form method="POST" action="admin.php"> 
+            <input type="hidden" name="request" Value="newComp">
 
-        <input type="submit" value="Update">
-        </form>
+            <label>Name<br><input type="text" name="SongName" require></label><br><br>
+            <label>Votes<br><input type="text" name="Votes" require></label><br><br>
+            <label>Video URL<br><input type="text" name="VideoURL" require></label><br><br>
+            <label><input type="radio" name="song" value="1" checked>Hela världen längtar</label><br>
 
-    </div>
-
-    <div>
-        <form method="POST" action="admin.php">
-        <label>Text<br><input type="text" name="Value" value="<?php echo $row["Value"]?>"></label><br>
-        <input type="submit" value="Update">
+            <input type="submit" value="Choose">
         </form>
     </div>
 
