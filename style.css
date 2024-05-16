@@ -114,27 +114,38 @@ section {
     justify-content: center;
 }
 
-.artist-card {
-    width: 45%;       
-    aspect-ratio: 2/2;                  
+.artist-card { 
+    width: 45%;          
+    aspect-ratio: 1/0;                                    
     background-color: rgb(34, 32, 32);     
-    margin: 10px;   
-    padding: 10px; 
-    border-radius: 55px;        
+    margin: 20px;     
+    padding: 20px;    
+    border-radius: 52px;           
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(230, 54, 157, 0.4);        
+    box-shadow: 0 0 10px rgba(230, 54, 157, 0.4);        
     display: flex;   
-    flex-direction: column; 
-    align-items: center;
+    flex-direction: column;       
+    align-items: center;   
     border: solid rgba(25, 0, 25, 0.418) 0px;         
+    
      
+    
 } 
 
- 
+.artist-card h3:first-of-type {
+    margin-bottom: 5px;  
+    font-size: 20px;  
+}
+
+.artist-card h3:last-of-type {
+    margin-top: 5px; 
+    font-size: 15px;  
+}
+
 h3 {
-    margin: 10px 0;
+    margin: 10px 0;   
     text-align: center;
-    font-size: 14px; /* Adjusted font size */
+    font-size: 14px;  
     color: rgba(255, 255, 255, 0.8);   
 
 
