@@ -19,3 +19,8 @@ body div:last-of-type {
 form {
     margin-left: 10px;
 }
+
+.hidden {
+    display: none;
+    visibility: hidden;
+}

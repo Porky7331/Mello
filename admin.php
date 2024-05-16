@@ -35,6 +35,7 @@ $stmt -> bind_param("ss", $_SESSION["Username"], $_SESSION["Password"]);
 $stmt -> execute();
 $account = $stmt -> get_result() -> fetch_assoc();
 
+// If user isn't logged in, send to login page
 if (empty($account)){
     //echo "invalid login";
 }else{
@@ -42,7 +43,7 @@ if (empty($account)){
 }
 
 
-// Fill competition table with a limit of 5 competitions.
+// Fill competition table with a limit of 5 competitions (if not already full).
 $sql = "SELECT * FROM competition";
 $result = $mysqli -> query($sql);
 $rows = $result->num_rows;
@@ -53,7 +54,7 @@ for ($i = 0; $i < $toAdd; $i++){
 }
 
 
-// Get the index of which competition
+// Get the index of which is requested to edit (1 by default)
 $comp = 1;
 if (!empty($_POST["comp"])){
     $comp = intval($_POST["comp"]);
@@ -61,17 +62,34 @@ if (!empty($_POST["comp"])){
 }
 $comp = Clamp($comp, 1, 5);
 
+
+
 $sql = "SELECT * FROM competition WHERE ID=?";
 $stmt = $mysqli -> prepare($sql);
 $stmt -> bind_param("i", $comp);
 $stmt -> execute();
 $competition = $stmt -> get_result() -> fetch_assoc();
 $ID = $competition["ID"];
-//echo empty($competition);
+
 echo "<br><br>Competition Array:<br>";
 print_r($competition);
 
+echo "<br><br>Song Array:<br>";
 
+$sql = "SELECT * FROM song WHERE Competition=$ID";
+$result = $mysqli -> query($sql);
+
+$songs = array();
+
+while ($song = $result -> fetch_assoc()){
+    print_r($song);
+    echo "<br><br>";
+    array_push($songs, [$song["ID"], $song["SongName"]]);
+}
+print_r($songs);
+
+
+// Handle requests
 if (isset($_POST["request"])) {
     if ($_POST["request"] == "updateComp"){
         $StartTime = isset($_POST["StartTime"]) ? $_POST["StartTime"] : 0;
@@ -82,6 +100,8 @@ if (isset($_POST["request"])) {
         $stmt = $mysqli -> prepare($sql);
         $stmt -> bind_param("sss", $StartTime, $EndTime, $Location);
         $stmt -> execute();
+    } elseif ($_POST["request"] == "selectSong"){
+
     }
 }
 
@@ -156,15 +176,25 @@ $stmt -> close();
     <div>
         <h3>Songs:</h3>
         <form method="POST" action="admin.php"> 
-            <input type="hidden" name="request" Value="updateComp">
-            <label><input type="radio" name="song" value="1" checked require>Hela världen längtar</label><br>
-            <label><input type="radio" name="song" value="2" <?php if($comp == 2){echo "checked";} ?> require>Guld och gröna skogar</label><br>
-            <label><input type="radio" name="song" value="3" <?php if($comp == 3){echo "checked";} ?> require>Euphoria</label><br>
+            <?php
+            foreach ($songs as $song){
+                echo "<label><input type='radio' name='song' value='$song[0]' checked require>$song[1]</label><br>";
+            }
+            ?>
+            
+            <input type="hidden" name="comp" Value="<?php echo"$comp"?>">
+            <input type="hidden" name="request" Value="selectSong">
             <input type="submit" value="Choose">
+        </form>
+
+        <form method="POST" action="admin.php" class="<?php if(sizeof($songs) >= 6){echo "hidden"}?>">
+            <input type="hidden" name="request" Value="addSong">
+            <input type="hidden" name="comp" Value="<?php echo"$comp"?>">
+            <input type="submit" value="Add Song">
         </form>
     </div>
 
-    <div>
+    <div class="">
         <h3>Edit song:</h3>
         <form method="POST" action="admin.php"> 
             <input type="hidden" name="request" Value="newComp">
