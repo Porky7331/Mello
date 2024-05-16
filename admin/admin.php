@@ -100,8 +100,22 @@ if (isset($_POST["request"])) {
         $stmt = $mysqli -> prepare($sql);
         $stmt -> bind_param("sss", $StartTime, $EndTime, $Location);
         $stmt -> execute();
-    } elseif ($_POST["request"] == "selectSong"){
+    } elseif ($_POST["request"] == "selectSong" && isset($_POST["song"])){
+        $sql = "SELECT * FROM song WHERE ID=?";
+        $stmt = $mysqli -> prepare($sql);
+        $stmt -> bind_param("i", $_POST["song"]);
+        $stmt -> execute();
+        $song = $stmt -> get_result() -> fetch_assoc();
+        
+        echo "<br><br>SIGGMA:<br>";
+        print_r($song);
 
+        $songID = $song["ID"];
+        $songName = $song["SongName"];
+        $songArtist = 1;
+        $songArtistDesc = 1;
+        $songURL = $song["VideoURL"];
+        $songVotes = $song["Votes"];
     }
 }
 
@@ -175,7 +189,7 @@ $stmt -> close();
 
     <div>
         <h3>Songs:</h3>
-        <form method="POST" action="admin.php"> 
+        <form method="POST" action="admin.php" class='<?php if(sizeof($songs) == 0){echo "hidden";}?>'> 
             <?php
             foreach ($songs as $song){
                 echo "<label><input type='radio' name='song' value='$song[0]' checked require>$song[1]</label><br>";
@@ -187,9 +201,9 @@ $stmt -> close();
             <input type="submit" value="Choose">
         </form>
 
-        <form method="POST" action="admin.php" class="<?php if(sizeof($songs) >= 6){echo "hidden"}?>">
+        <form method="POST" action="admin.php" class='<?php if(sizeof($songs) >= 6){echo "hidden";}?>'>
             <input type="hidden" name="request" Value="addSong">
-            <input type="hidden" name="comp" Value="<?php echo"$comp"?>">
+            <input type="hidden" name="comp" Value="<?php echo"$comp";?>">
             <input type="submit" value="Add Song">
         </form>
     </div>
@@ -198,8 +212,13 @@ $stmt -> close();
         <h3>Edit song:</h3>
         <form method="POST" action="admin.php"> 
             <input type="hidden" name="request" Value="newComp">
-
-            <label>Name<br><input type="text" name="SongName" require></label><br><br>
+            $songID = $song["ID"];
+        $songName = $song["SongName"];
+        $songArtist = 1;
+        $songArtistDesc = 1;
+        $songURL = $song["VideoURL"];
+        $songVotes = $song["Votes"];
+            <label>Name<br><input value="<?php if(isset($songName)){echo "$123";}?>" type="text" name="SongName" require></label><br><br>
             <label>Votes<br><input type="text" name="Votes" require></label><br><br>
             <label>Video URL<br><input type="text" name="VideoURL" require></label><br><br>
             <label><input type="radio" name="song" value="1" checked>Hela världen längtar</label><br>
