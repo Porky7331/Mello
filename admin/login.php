@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="inlogsida.css">
+    <link rel="stylesheet" href="../css/login.css">
 </head>
-<body class="rainbow-background">
+<body>
     <div id="melotitle">
-        <img src="images/title.png" alt="melotitle">
+        <img src="../images/title.png" alt="melotitle">
     </div>
     <div id="container">
         <form method="post" action="inlog.php"> <!-- skicka till en annan sida sen till admin om inloget är rätt    på andra sidan sätt session för att kolla om den är på i admin sidan-->

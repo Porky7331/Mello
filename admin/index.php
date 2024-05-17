@@ -117,12 +117,11 @@ if (isset($_POST["request"])) {
         $su = isset($_POST["VideoURL"]) ? $_POST["VideoURL"] : "";
         $sv = isset($_POST["Votes"]) ? $_POST["Votes"] : 0;
 
-
         $sql = "UPDATE song SET `Competition`=?,`SongName`=?,`VideoURL`=?,`Votes`= ?";
         $stmt = $mysqli -> prepare($sql);
         $stmt -> bind_param("issi", $comp, $sn, $su, $sv);
         $stmt -> execute();
-        
+
     } if (isset($_POST["song"])){
         $sql = "SELECT * FROM song WHERE ID=?";
         $stmt = $mysqli -> prepare($sql);
