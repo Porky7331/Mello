@@ -3,7 +3,6 @@
 echo "<br>Post: ";
 print_r($_POST);
 
-
 function Clamp($val = 0, $min=0, $max=1)
 {
     if ($val > $max) {
@@ -20,13 +19,25 @@ $_SESSION["Password"] = "admin";
 
 
 if (empty($_SESSION["Username"]) or empty($_SESSION["Username"])) {
-    //header("Location: Admin.php");
+    //header("Location: index.php");
     //echo "NOT LOGGED IN, BACK TO LOGIN PAGE";
 }
 //print_r($_SESSION);
 
+$url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$website = false;
+if(strpos($url, "melo-voting-2025"))
+{
+    echo "I FOUND WEBDISTE";
+    $website = true;
+}
+$dbUser = $website ? "ntigskov_melo-voting-2025" : "melodifestivalen";
+$dbPass = $website ? "wsoNXXbQ0h7J6ZcCFDXN" : "";
+$dbRoot = $website ? "ntigskov_melo-voting-2025" : "root";
+
+
 // Connect to mysql
-$mysqli = new mysqli("localhost","root","","melodifestivalen");
+$mysqli = new mysqli("localhost", "$dbRoot", "$dbPass","$dbUser");
 
 //Check if user is logged in, if not, redirect to login page
 $sql = "SELECT * FROM admin WHERE username=? AND password=?";
@@ -165,7 +176,7 @@ $stmt -> close();
 <body>
     <div>
         <h4>Competition:</h4>
-        <form method="POST" action="admin.php"> 
+        <form method="POST" action="index.php"> 
             <input type="hidden" name="request" Value="newComp">
             <label><input type="radio" name="comp" value="1" checked></label>1<br>
             <label><input type="radio" name="comp" value="2" <?php if($comp == 2){echo "checked";} ?>>2</label><br>
@@ -176,7 +187,7 @@ $stmt -> close();
         </form>
 
         <h4>Edit competition <?php echo "$comp"; ?>:</h4>
-        <form method="POST" action="admin.php">
+        <form method="POST" action="index.php">
             <input type="hidden" name="request" Value="updateComp">
             <input type="hidden" value="<?php echo "$comp"; ?>" name="comp">
 
@@ -189,7 +200,7 @@ $stmt -> close();
 
     <div>
         <h3>Songs:</h3>
-        <form method="POST" action="admin.php" class='<?php if(sizeof($songs) == 0){echo "hidden";}?>'> 
+        <form method="POST" action="index.php" class='<?php if(sizeof($songs) == 0){echo "hidden";}?>'> 
             <?php
             foreach ($songs as $song){
                 echo "<label><input type='radio' name='song' value='$song[0]' checked require>$song[1]</label><br>";
@@ -201,7 +212,7 @@ $stmt -> close();
             <input type="submit" value="Choose">
         </form>
 
-        <form method="POST" action="admin.php" class='<?php if(sizeof($songs) >= 6){echo "hidden";}?>'>
+        <form method="POST" action="index.php" class='<?php if(sizeof($songs) >= 6){echo "hidden";}?>'>
             <input type="hidden" name="request" Value="addSong">
             <input type="hidden" name="comp" Value="<?php echo"$comp";?>">
             <input type="submit" value="Add Song">
@@ -210,7 +221,7 @@ $stmt -> close();
 
     <div class="">
         <h3>Edit song:</h3>
-        <form method="POST" action="admin.php"> 
+        <form method="POST" action="index.php"> 
             <input type="hidden" name="request" Value="newComp">
             $songID = $song["ID"];
         $songName = $song["SongName"];
