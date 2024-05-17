@@ -111,15 +111,26 @@ if (isset($_POST["request"])) {
         $stmt = $mysqli -> prepare($sql);
         $stmt -> bind_param("sss", $StartTime, $EndTime, $Location);
         $stmt -> execute();
-    } elseif ($_POST["request"] == "selectSong" && isset($_POST["song"])){
+
+    } if ($_POST["request"] == "updateSong" && isset($_POST["song"])) {
+        $sn = isset($_POST["SongName"]) ? $_POST["SongName"] : "";
+        $su = isset($_POST["VideoURL"]) ? $_POST["VideoURL"] : "";
+        $sv = isset($_POST["Votes"]) ? $_POST["Votes"] : 0;
+
+
+        $sql = "UPDATE song SET `Competition`=?,`SongName`=?,`VideoURL`=?,`Votes`= ?";
+        $stmt = $mysqli -> prepare($sql);
+        $stmt -> bind_param("issi", $comp, $sn, $su, $sv);
+        $stmt -> execute();
+        
+    } if (isset($_POST["song"])){
         $sql = "SELECT * FROM song WHERE ID=?";
         $stmt = $mysqli -> prepare($sql);
         $stmt -> bind_param("i", $_POST["song"]);
+        $teest =  $_POST["song"];
+        echo "song ID:  $teest";
         $stmt -> execute();
         $song = $stmt -> get_result() -> fetch_assoc();
-        
-        echo "<br><br>SIGGMA:<br>";
-        print_r($song);
 
         $songID = $song["ID"];
         $songName = $song["SongName"];
@@ -135,35 +146,7 @@ $EndTime = isset($EndTime) ? $EndTime : $competition["EndTime"];
 $Location = isset($Location) ? $Location : $competition["Location"];
 
 $stmt -> close();
-/*
-$ID = $_SESSION["ID"];
-
-// Connect to mysql
-$mysqli = new mysqli("localhost","root","","creator");
-
-$sql = "SELECT * FROM profiles";
-$result = $mysqli -> query($sql);
-
-while ($row = $result -> fetch_assoc()) {
-    $userID = $row["ID"];
-}
-
-$sql = "";
-
-$stmt = $mysqli -> prepare($sql);
-
-$stmt -> bind_param("ss", $type, $val);
-
-$stmt -> execute();
-
-$account = $stmt -> get_result() -> fetch_assoc();
-
-$stmt -> close();
-*/
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -222,19 +205,20 @@ $stmt -> close();
     <div class="">
         <h3>Edit song:</h3>
         <form method="POST" action="index.php"> 
-            <input type="hidden" name="request" Value="newComp">
+            <input type="hidden" name="request" Value="updateSong">
+            <input type="hidden" name="song" Value="<?php if(isset($songID)){echo "$songID";}?>">
+            <input type="hidden" name="comp" Value="<?php echo"$comp"?>">
             $songID = $song["ID"];
         $songName = $song["SongName"];
         $songArtist = 1;
         $songArtistDesc = 1;
         $songURL = $song["VideoURL"];
         $songVotes = $song["Votes"];
-            <label>Name<br><input value="<?php if(isset($songName)){echo "$123";}?>" type="text" name="SongName" require></label><br><br>
-            <label>Votes<br><input type="text" name="Votes" require></label><br><br>
-            <label>Video URL<br><input type="text" name="VideoURL" require></label><br><br>
-            <label><input type="radio" name="song" value="1" checked>Hela världen längtar</label><br>
+            <label>Name<br><input value="<?php if(isset($songName)){echo "$songName";}?>" type="text" name="SongName" require></label><br><br>
+            <label>Votes<br><input value="<?php if(isset($songVotes)){echo "$songVotes";}?>" type="text" name="Votes" require></label><br><br>
+            <label>Video URL<br><input value="<?php if(isset($songURL)){echo "$songURL";}?>" type="text" name="VideoURL" require></label><br><br>
 
-            <input type="submit" value="Choose">
+            <input type="submit" value="Update">
         </form>
     </div>
 
