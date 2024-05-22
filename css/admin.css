@@ -24,3 +24,13 @@ form {
     display: none;
     visibility: hidden;
 }
+
+.songListDiv {
+    width: 100%;
+}
+
+.songListDiv button {
+    display: block;
+    width: 50%;
+    aspect-ratio: 10 / 2;
+}
