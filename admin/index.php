@@ -194,24 +194,17 @@ $stmt -> close();
         </div>
     </div>
 
-    <div class="">
+    <div class="hidden" id="editSongSection">
         <h3>Edit song:</h3>
-        <form method="POST" action="index.php"> 
-            <input type="hidden" name="request" Value="updateSong">
-            <input type="hidden" name="song" Value="<?php if(isset($songID)){echo "$songID";}?>">
-            <input type="hidden" name="comp" Value="<?php echo"$comp"?>">
-            $songID = $song["ID"];
-        $songName = $song["SongName"];
-        $songArtist = 1;
-        $songArtistDesc = 1;
-        $songURL = $song["VideoURL"];
-        $songVotes = $song["Votes"];
-            <label>Name<br><input value="<?php if(isset($songName)){echo "$songName";}?>" type="text" name="SongName" require></label><br><br>
-            <label>Votes<br><input value="<?php if(isset($songVotes)){echo "$songVotes";}?>" type="text" name="Votes" require></label><br><br>
-            <label>Video URL<br><input value="<?php if(isset($songURL)){echo "$songURL";}?>" type="text" name="VideoURL" require></label><br><br>
-
-            <input type="submit" value="Update">
-        </form>
+        <div class="editSongDiv">
+            <label>Song Name<br><input type="text" id="SongName"></label><br><br>
+            <label>Video URL<br><input type="text" id="VideoURL"></label><br><br>
+            <label>Edit Votes<br><input type="text" id="Votes"></label><br><br>
+            <br>
+            <label>Artist Name<br><input type="text" id="ArtistName"></label><br><br>
+            <label>Artist Description<br><input type="text" id="ArtistDescription"></label><br><br>
+            <button onclick="editSong()">Update</button>
+        </div>
     </div>
 
 

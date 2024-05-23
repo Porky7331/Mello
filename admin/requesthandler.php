@@ -23,10 +23,7 @@ $stmt -> bind_param("ss", $_SESSION["Username"], $_SESSION["Password"]);
 $stmt -> execute();
 $account = $stmt -> get_result() -> fetch_assoc();
 
-if (isset($req["getContestContestants"])){
-    // ID, URL, Name, Description
-}
-elseif (isset($req["songCount"])){
+if (isset($req["songCount"])){
     $compID = $req["songCount"];
     $count = compSongAmount($compID, $mysqli);
     echo json_encode("$count");
@@ -34,7 +31,8 @@ elseif (isset($req["songCount"])){
 elseif (isset($req["addSong"])){
     $compID = $req["addSong"];
     $count = compSongAmount($compID, $mysqli);
-    if ($count == false || intval($count) >= 6) {
+    if (intval($count) >= 6) {
+        echo json_encode("limitReached");
         exit();
     }
 
@@ -46,7 +44,7 @@ elseif (isset($req["addSong"])){
     $row = mysqli_fetch_assoc($result);
     $aristID = $row["ID"];
 
-    $sql = "INSERT INTO `song`(`ArtistID`, `Competition`) VALUES ('$aristID','$compID')";
+    $sql = "INSERT INTO `song`(`ArtistID`, `Competition`, `SongName`) VALUES ('$aristID','$compID', 'New Song')";
     mysqli_query($mysqli, $sql);
 
     echo json_encode("success");
@@ -62,6 +60,28 @@ elseif (isset($req["getCompSongs"])){
     $artistArray = $result->fetch_all(MYSQLI_ASSOC);
 
     echo json_encode($artistArray);
+}
+else if (isset($req["getArtistFromID"])){
+    $artistID = $req["getArtistFromID"];
+
+    $sql = "SELECT * FROM artist WHERE ID=?";
+    $stmt = $mysqli -> prepare($sql);
+    $stmt -> bind_param("i", $artistID);
+    $stmt -> execute();
+    $result = $stmt -> get_result() -> fetch_assoc();
+    
+    echo json_encode($result);
+}
+else if (isset($req["editSong"])){
+    $sql = "UPDATE `song` SET `SongName`=?,`VideoURL`=?,`Votes`=? WHERE ID = ?";
+    $stmt = $mysqli -> prepare($sql);
+    $stmt -> bind_param("ssii", $req["SongName"], $req["VideoURL"], $req["Votes"], $req["SongID"]);
+    $stmt -> execute();
+    
+    $sql = "UPDATE `artist` SET `Name`=?,`Description`=? WHERE ID=?";
+    $stmt = $mysqli -> prepare($sql);
+    $stmt -> bind_param("ssi", $req["ArtistName"], $req["ArtistDescription"], $req["ArtistID"]);
+    $stmt -> execute();
 }
 
 // Get the song count in a competition
