@@ -1,7 +1,5 @@
 <?php
 
-echo "<br>Post: ";
-print_r($_POST);
 
 function Clamp($val = 0, $min=0, $max=1)
 {
@@ -28,7 +26,6 @@ $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_
 $website = false;
 if(strpos($url, "melo-voting-2025"))
 {
-    echo "I FOUND WEBDISTE";
     $website = true;
 }
 $dbUser = $website ? "ntigskov_melo-voting-2025" : "melodifestivalen";
@@ -69,7 +66,6 @@ for ($i = 0; $i < $toAdd; $i++){
 $comp = 1;
 if (!empty($_POST["comp"])){
     $comp = intval($_POST["comp"]);
-    echo "<br><br>Competition index: $comp";
 }
 $comp = Clamp($comp, 1, 5);
 
@@ -82,10 +78,6 @@ $stmt -> execute();
 $competition = $stmt -> get_result() -> fetch_assoc();
 $ID = $competition["ID"];
 
-echo "<br><br>Competition Array:<br>";
-print_r($competition);
-
-echo "<br><br>Song Array:<br>";
 
 $sql = "SELECT * FROM song WHERE Competition=$ID";
 $result = $mysqli -> query($sql);
@@ -93,11 +85,8 @@ $result = $mysqli -> query($sql);
 $songs = array();
 
 while ($song = $result -> fetch_assoc()){
-    print_r($song);
-    echo "<br><br>";
     array_push($songs, [$song["ID"], $song["SongName"]]);
 }
-print_r($songs);
 
 
 // Handle requests
@@ -127,7 +116,7 @@ if (isset($_POST["request"])) {
         $stmt = $mysqli -> prepare($sql);
         $stmt -> bind_param("i", $_POST["song"]);
         $teest =  $_POST["song"];
-        echo "song ID:  $teest";
+
         $stmt -> execute();
         $song = $stmt -> get_result() -> fetch_assoc();
 
@@ -153,7 +142,8 @@ $stmt -> close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>inlogkontrol</title>
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <script src="../js/admin.js" defer></script>
 </head>
 <body>
     <div>
@@ -182,6 +172,7 @@ $stmt -> close();
 
     <div>
         <h3>Songs:</h3>
+        <!--
         <form method="POST" action="index.php" class='<?php if(sizeof($songs) == 0){echo "hidden";}?>'> 
             <?php
             foreach ($songs as $song){
@@ -193,32 +184,27 @@ $stmt -> close();
             <input type="hidden" name="request" Value="selectSong">
             <input type="submit" value="Choose">
         </form>
+        -->
+        <div class="songListDiv">
 
-        <form method="POST" action="index.php" class='<?php if(sizeof($songs) >= 6){echo "hidden";}?>'>
-            <input type="hidden" name="request" Value="addSong">
-            <input type="hidden" name="comp" Value="<?php echo"$comp";?>">
-            <input type="submit" value="Add Song">
-        </form>
+        </div>
+
+        <div class="addSongDiv">
+            <button onclick="addSong()">AddSong</button>
+        </div>
     </div>
 
-    <div class="">
+    <div class="hidden" id="editSongSection">
         <h3>Edit song:</h3>
-        <form method="POST" action="index.php"> 
-            <input type="hidden" name="request" Value="updateSong">
-            <input type="hidden" name="song" Value="<?php if(isset($songID)){echo "$songID";}?>">
-            <input type="hidden" name="comp" Value="<?php echo"$comp"?>">
-            $songID = $song["ID"];
-        $songName = $song["SongName"];
-        $songArtist = 1;
-        $songArtistDesc = 1;
-        $songURL = $song["VideoURL"];
-        $songVotes = $song["Votes"];
-            <label>Name<br><input value="<?php if(isset($songName)){echo "$songName";}?>" type="text" name="SongName" require></label><br><br>
-            <label>Votes<br><input value="<?php if(isset($songVotes)){echo "$songVotes";}?>" type="text" name="Votes" require></label><br><br>
-            <label>Video URL<br><input value="<?php if(isset($songURL)){echo "$songURL";}?>" type="text" name="VideoURL" require></label><br><br>
-
-            <input type="submit" value="Update">
-        </form>
+        <div class="editSongDiv">
+            <label>Song Name<br><input type="text" id="SongName"></label><br><br>
+            <label>Video URL<br><input type="text" id="VideoURL"></label><br><br>
+            <label>Edit Votes<br><input type="text" id="Votes"></label><br><br>
+            <br>
+            <label>Artist Name<br><input type="text" id="ArtistName"></label><br><br>
+            <label>Artist Description<br><input type="text" id="ArtistDescription"></label><br><br>
+            <button onclick="editSong()">Update</button>
+        </div>
     </div>
 
 
