@@ -22,6 +22,19 @@ async function fetchData(fetchUrl, objectToSend) {
     }
 }
 
+async function deleteSong(){
+    if (confirm("Are you sure?")) {
+        let sendData = {};
+        sendData.SongID = currentSongID;
+        sendData.ArtistID = currentArtistID;
+        sendData.deleteSong = true;
+        let response = await fetchData("../admin/requesthandler.php", sendData);
+        songList();
+        let editSongSection = document.getElementById("editSongSection");
+        editSongSection.classList.add("hidden");
+    }
+}
+
 async function editSong(){
     let sendData = {};
     sendData.SongID = currentSongID;
@@ -33,10 +46,10 @@ async function editSong(){
     sendData.Votes = document.querySelector("#Votes").value;
     sendData.editSong = true;
     let response = await fetchData("../admin/requesthandler.php", sendData);
+    songList();
 }
 
 async function showEditSong(songID, SongName, VideoURL, Votes, ArtistID){
-    let editSongSection = document.getElementById("editSongSection");
     editSongSection.classList.remove("hidden");
     let response = await fetchData("../admin/requesthandler.php", {"getCompSongs":comp});
     let songs = JSON.parse(response);
@@ -68,6 +81,7 @@ async function addSong(){
 async function songList(){
     let div = document.getElementsByClassName("songListDiv")[0];
     div.innerHTML = "";
+    pickCompDiv.innerHTML = "";
     
     let response = await fetchData("../admin/requesthandler.php", {"getCompSongs":comp});
     let songs = JSON.parse(response);
@@ -78,9 +92,33 @@ async function songList(){
         div.appendChild(newButton);
     });
 
+    for (let i=1; i<7; i++){
+        let newButton = document.createElement('button');
+        newButton.innerHTML = i;
+        newButton.onclick = function () { pickComp(i); };
+        pickCompDiv.appendChild(newButton);
+    }
 }
 
-let comp = 1;
+function clamp(val, min, max){
+    if (val < min){
+        return min;
+    }
+    else if (val > max){
+        return max;
+    }
+    return val;
+}
+
+function pickComp(val){
+    comp = clamp(val, 1, 6);
+    console.log(clamp(val, 1, 6), "lool", val);
+    songList();
+}
+
+var comp = 1;
 var currentSongID = 0;
 var currentArtistID = 0;
+let editSongSection = document.getElementById("editSongSection");
+let pickCompDiv = document.getElementById("pickCompDiv");
 songList();

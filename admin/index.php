@@ -146,17 +146,11 @@ $stmt -> close();
     <script src="../js/admin.js" defer></script>
 </head>
 <body>
-    <div>
+    <div class="container">
         <h4>Competition:</h4>
-        <form method="POST" action="index.php"> 
-            <input type="hidden" name="request" Value="newComp">
-            <label><input type="radio" name="comp" value="1" checked></label>1<br>
-            <label><input type="radio" name="comp" value="2" <?php if($comp == 2){echo "checked";} ?>>2</label><br>
-            <label><input type="radio" name="comp" value="3" <?php if($comp == 3){echo "checked";} ?>>3</label><br>
-            <label><input type="radio" name="comp" value="4" <?php if($comp == 4){echo "checked";} ?>>4</label><br>
-            <label><input type="radio" name="comp" value="5" <?php if($comp == 5){echo "checked";} ?>>5</label><br>
-            <input type="submit" value="Choose">
-        </form>
+        <div id="pickCompDiv">
+
+        </div>
 
         <h4>Edit competition <?php echo "$comp"; ?>:</h4>
         <form method="POST" action="index.php">
@@ -170,21 +164,8 @@ $stmt -> close();
         </form>
     </div>
 
-    <div>
-        <h3>Songs:</h3>
-        <!--
-        <form method="POST" action="index.php" class='<?php if(sizeof($songs) == 0){echo "hidden";}?>'> 
-            <?php
-            foreach ($songs as $song){
-                echo "<label><input type='radio' name='song' value='$song[0]' checked require>$song[1]</label><br>";
-            }
-            ?>
-            
-            <input type="hidden" name="comp" Value="<?php echo"$comp"?>">
-            <input type="hidden" name="request" Value="selectSong">
-            <input type="submit" value="Choose">
-        </form>
-        -->
+    <div class="container">
+        <h4>Songs:</h4>
         <div class="songListDiv">
 
         </div>
@@ -194,8 +175,8 @@ $stmt -> close();
         </div>
     </div>
 
-    <div class="hidden" id="editSongSection">
-        <h3>Edit song:</h3>
+    <div class="hidden" id="editSongSection" class="container">
+        <h4>Edit song:</h4>
         <div class="editSongDiv">
             <label>Song Name<br><input type="text" id="SongName"></label><br><br>
             <label>Video URL<br><input type="text" id="VideoURL"></label><br><br>
@@ -204,6 +185,7 @@ $stmt -> close();
             <label>Artist Name<br><input type="text" id="ArtistName"></label><br><br>
             <label>Artist Description<br><input type="text" id="ArtistDescription"></label><br><br>
             <button onclick="editSong()">Update</button>
+            <button onclick="deleteSong()">Delete</button>
         </div>
     </div>
 

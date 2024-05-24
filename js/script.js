@@ -48,3 +48,9 @@ if (mobile) {
 });
 }
 
+//var body = document.body,
+//    html = document.documentElement;
+
+//var height = document.documentElement.scrollHeight;
+//document.getElementById("bg-glow").style.height = height.toString()+"px";
+//console.log(height.toString()+"px");

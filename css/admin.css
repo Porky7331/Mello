@@ -1,19 +1,25 @@
+* {
+    margin: 0;
+}
+
 body{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
-body div {
+.container {
+    height: 100vh;
     width: 33%;
     background-color: rgb(219, 219, 219);
-}
+    
+    &:first-of-type {
+        background-color: rgb(201, 201, 201);
+    }
 
-body div:first-of-type {
-    background-color: rgb(201, 201, 201);
-}
-
-body div:last-of-type {
-    background-color: rgb(201, 201, 201);
+    &:last-of-type {
+        background-color: rgb(201, 201, 201);
+    }
 }
 
 form {
@@ -33,4 +39,28 @@ form {
     display: block;
     width: 50%;
     aspect-ratio: 10 / 2;
+}
+
+#pickCompDiv{
+    height: 30%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#pickCompDiv button {
+    display: block;
+    width: 15%;
+    aspect-ratio: 1 / 1;
+}
+
+button {
+    margin: 10px;
+}
+
+#editSongSection * {
+    margin-left: 20px;
+}
+
+h4 {
+    margin: 15px;
 }

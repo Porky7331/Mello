@@ -9,25 +9,16 @@
     border: none;
 }
 
-.bg-glow {
-    width: 100%;
-    height: 500%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    position: absolute;
-    background: rgba(56, 138, 201, 0.314);
-    background: linear-gradient(90deg, rgba(29, 74, 108, 0.5) 0%, rgba(108, 29, 94, 0.25) 50%, rgba(115, 86, 0, 0.5) 100%);
-}
 
 body {
     z-index: -2;
-    background-image: url("../images/concrete-texture.jpg");
+    background-image: url("https://i.imgur.com/g4c18wm.jpeg");
     background-size: 200px;
     display: flex;
     align-items: center;
     flex-direction: column;
     overflow-x: hidden;
+    position: relative;
 }
 
 main {
@@ -36,19 +27,11 @@ main {
     background: linear-gradient(rgb(42, 41, 41), rgb(42, 41, 41)) 50% 50%/calc(100% - 10px) calc(100% - 10px) no-repeat,
             linear-gradient(90deg, #0081ff 0%, rgba(238,94,217,1) 50%, rgba(255,126,0,1) 100%);
 
-    /* box-shadow: 0 0 50px 30px rgba(121, 0, 121, 0.418), 0 0 50px 60px rgba(0, 0, 0, 0.418), 0 0 500px 500px rgba(0, 0, 0, 0.295);*/
-   
     z-index: 1;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.text-rainbow-bg {
-    background: linear-gradient(90deg, rgba(56,137,201,1) 0%, rgba(201,56,174,1) 50%, rgba(255,192,0,1) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 h1 {
@@ -71,12 +54,13 @@ header {
     background-size: 200px;
     box-shadow: 0 0 30px 40px rgba(0, 0, 0, 0.289);
     width: 100vw;
-    height: 30vh;
+    height: calc(30vh + 0px);
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
     z-index: 2;
+    
 }
 
 header div {
@@ -103,15 +87,22 @@ header div img{
         width: 50%;
         color: aliceblue;
         filter: invert(1);
+       
     }
+}
+
+header div:first-of-type {
+    height: 5px;
+    width: 100%;
 }
 
 nav {
     background-color: rgba(0, 0, 0, 0.653);
-    border-top: solid rgba(0, 0, 0, 0.447) 5px;
+    border-top: rgba(0, 0, 0, 0.807) 5px solid;
 
     width: 100vw;
-    height: calc(30% - 5px);
+    height: calc(30% - 10px);
+    
 }
 
 nav ul {
@@ -172,7 +163,16 @@ section {
         box-shadow: inset 0 0 0px 0 black;
         box-shadow: 0 0 10px 0 black;
         background-color: rgb(50, 50, 50);
+
+        .text-rainbow-bg {
+            background: linear-gradient(90deg, rgb(76, 177, 255), rgba(201,56,174,1), rgba(255,192,0,1));
+            filter: saturate(1.5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     }
+
+
 }
 
 h3 {
@@ -180,7 +180,7 @@ h3 {
     width: 100%;
     text-align: center;
     margin-bottom: 2%;
-}
+} 
 
 h4 {
     color: rgb(196, 196, 196);
@@ -203,17 +203,14 @@ iframe {
 }
 
 .artist-card button {
-    background: rgb(56,137,201);
-    background: linear-gradient(90deg, rgba(56,137,201,1) 0%, rgba(201,56,174,1) 50%, rgba(255,192,0,1) 100%);
     box-shadow: none;
-    filter: grayscale(0.9);
-    box-shadow: 0 0 1px 5px rgba(122, 122, 122, 0.323);
+    filter: grayscale(1);
 
     width: 50%;
     aspect-ratio: 8 / 3;
     font-weight: bolder;
     border-radius: 20px;
-
+    border: rgb(36, 36, 36) solid 5px;
     font-size: 150%;
 
     transition: 250ms all;
@@ -222,6 +219,13 @@ iframe {
         filter: grayscale(0);
         scale: 1.05;
         cursor:pointer;
+        transition: 150ms scale;
+    }
+
+    &:active {
+        filter: grayscale(0);
+        scale: 0.95;
+        transition: 100ms;
     }
 }
 
@@ -239,4 +243,19 @@ iframe {
 *::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: #3e3e3e;
+}
+
+.rainbow-bg{
+    background: linear-gradient(90deg, rgba(56,137,201,1) 0%, rgba(201,56,174,1) 50%, rgba(255,192,0,1) 100%);
+}
+
+#bg-glow {
+    width: 100vw;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: -1;
+    position: absolute;
+    background: rgba(56, 138, 201, 0.314);
+    background: linear-gradient(90deg, rgba(29, 74, 108, 0.5) 0%, rgba(108, 29, 94, 0.25) 50%, rgba(115, 86, 0, 0.5) 100%);
 }

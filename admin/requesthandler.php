@@ -83,6 +83,17 @@ else if (isset($req["editSong"])){
     $stmt -> bind_param("ssi", $req["ArtistName"], $req["ArtistDescription"], $req["ArtistID"]);
     $stmt -> execute();
 }
+else if (isset($req["deleteSong"])){
+    $sql = "DELETE FROM `song` WHERE ID = ?";
+    $stmt = $mysqli -> prepare($sql);
+    $stmt -> bind_param("i", $req["SongID"]);
+    $stmt -> execute();
+    
+    $sql = "DELETE FROM `artist` WHERE ID = ?";
+    $stmt = $mysqli -> prepare($sql);
+    $stmt -> bind_param("i", $req["ArtistID"]);
+    $stmt -> execute();
+}
 
 // Get the song count in a competition
 function compSongAmount($ID, $mysqli){
