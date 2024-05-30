@@ -41,10 +41,19 @@ h1 {
     font-weight: lighter;
     margin-top: 40px;
 }
+
 h2 {
     color: rgba(255, 255, 255, 0.533);
-    font-size: 200%;
-    margin-top: 10px;
+    font-size: 160%;
+    margin: 5px 0 10px 0;
+    font-weight: lighter;
+    text-align: center;
+}
+
+h3 {
+    color: rgba(255, 255, 255, 0.533);
+    font-size: 150%;
+    margin: 2px 0 0 0;
     font-weight: lighter;
     text-align: center;
 }
@@ -60,17 +69,17 @@ header {
     flex-wrap: wrap;
     justify-content: center;
     z-index: 2;
+    margin-bottom: 20px;
     
-}
-
-header div {
-    background-color: rgba(0, 0, 0, 0.578);
-    width: 100%;
-    height: 70%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    & div {
+        background-color: rgba(0, 0, 0, 0.578);
+        width: 100%;
+        height: 70%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 header div img{
@@ -103,36 +112,36 @@ nav {
     width: 100vw;
     height: calc(30% - 10px);
     
-}
-
-nav ul {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
-}
-
-nav ul button {
-    color: white;
-    background-color: rgba(0, 0, 0, 0.137);
-    display: block;
-
-
-    width: 20%;
-    height: 100%;
-    text-align: center;
-    font-size: 120%;
-    font-weight: bold;
-
-    &:hover {
-        cursor: pointer;
-        background-color: rgba(61, 61, 61, 0.311);
+    & ul {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
     }
 
-    &:active {
-        background-color: rgba(0, 0, 0, 0.292);
+    & ul button {
+        color: white;
+        background-color: rgba(0, 0, 0, 0.137);
+        display: block;
+    
+    
+        width: 20%;
+        height: 100%;
+        text-align: center;
+        font-size: 120%;
+        font-weight: bold;
+    
+        &:hover {
+            cursor: pointer;
+            background-color: rgba(61, 61, 61, 0.311);
+        }
+    
+        &:active {
+            background-color: rgba(0, 0, 0, 0.292);
+        }
     }
 }
+
 
 section {
     width: 90%;
@@ -145,7 +154,7 @@ section {
 .artist-card {
     width: 40%;
     padding: 10px;
-    aspect-ratio: 5 / 6;
+    /*aspect-ratio: 5 / 6;*/
     background-color: rgb(35, 35, 35);
     margin: 20px;
     overflow: hidden;
@@ -164,7 +173,7 @@ section {
         box-shadow: 0 0 10px 0 black;
         background-color: rgb(50, 50, 50);
 
-        .text-rainbow-bg {
+        & h3 {
             background: linear-gradient(90deg, rgb(76, 177, 255), rgba(201,56,174,1), rgba(255,192,0,1));
             filter: saturate(1.5);
             -webkit-background-clip: text;
@@ -172,34 +181,26 @@ section {
         }
     }
 
+    & h3 {
+        display: block;
+        width: auto;
+        text-align: center;
+        margin-bottom: 2%;
+    }
 
-}
+    & h4 {
+        color: rgb(196, 196, 196);
+        margin-bottom: 2%;
+    }
 
-h3 {
-    display: block;
-    width: 100%;
-    text-align: center;
-    margin-bottom: 2%;
-} 
-
-h4 {
-    color: rgb(196, 196, 196);
-    margin-bottom: 2%;
-}
-
-iframe {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 10px;
-}
-
-.artist-card p {
-    display: block;
-    height: 15%;
-    width: 80%;
-    font-size: 100%;
-    text-align: center;
-    margin: 2%;
+    & p {
+        display: block;
+        height: 15%;
+        width: 80%;
+        font-size: 100%;
+        text-align: center;
+        margin: 2%;
+    }
 }
 
 .artist-card button {
@@ -214,11 +215,11 @@ iframe {
     font-size: 150%;
 
     transition: 250ms all;
+    cursor:pointer;
 
     &:hover {
         filter: grayscale(0);
         scale: 1.05;
-        cursor:pointer;
         transition: 150ms scale;
     }
 
@@ -228,6 +229,13 @@ iframe {
         transition: 100ms;
     }
 }
+
+iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+}
+
 
 *::-webkit-scrollbar {
     height: 10px;

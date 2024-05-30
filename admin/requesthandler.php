@@ -6,7 +6,6 @@ $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_
 $website = false;
 if(strpos($url, "melo-voting-2025"))
 {
-    echo "I FOUND WEBDISTE";
     $website = true;
 }
 $dbUser = $website ? "ntigskov_melo-voting-2025" : "melodifestivalen";
@@ -61,7 +60,7 @@ elseif (isset($req["getCompSongs"])){
 
     echo json_encode($artistArray);
 }
-else if (isset($req["getArtistFromID"])){
+elseif (isset($req["getArtistFromID"])){
     $artistID = $req["getArtistFromID"];
 
     $sql = "SELECT * FROM artist WHERE ID=?";
@@ -72,7 +71,7 @@ else if (isset($req["getArtistFromID"])){
     
     echo json_encode($result);
 }
-else if (isset($req["editSong"])){
+elseif (isset($req["editSong"])){
     $sql = "UPDATE `song` SET `SongName`=?,`VideoURL`=?,`Votes`=? WHERE ID = ?";
     $stmt = $mysqli -> prepare($sql);
     $stmt -> bind_param("ssii", $req["SongName"], $req["VideoURL"], $req["Votes"], $req["SongID"]);
@@ -83,7 +82,7 @@ else if (isset($req["editSong"])){
     $stmt -> bind_param("ssi", $req["ArtistName"], $req["ArtistDescription"], $req["ArtistID"]);
     $stmt -> execute();
 }
-else if (isset($req["deleteSong"])){
+elseif (isset($req["deleteSong"])){
     $sql = "DELETE FROM `song` WHERE ID = ?";
     $stmt = $mysqli -> prepare($sql);
     $stmt -> bind_param("i", $req["SongID"]);
@@ -93,6 +92,37 @@ else if (isset($req["deleteSong"])){
     $stmt = $mysqli -> prepare($sql);
     $stmt -> bind_param("i", $req["ArtistID"]);
     $stmt -> execute();
+}
+elseif (isset($req["SetTime"])){
+    $StartTime = $req["StartTime"];
+    $CompDuration = $req["CompDuration"];
+    //INSERT INTO `time`(`StartTime`, `CompDuration`) VALUES ('0','0')
+
+    $sql = "SELECT * FROM time";
+    $result = $mysqli -> query($sql);
+    $rows = $result->num_rows;
+    $row = $result -> fetch_assoc();
+    $ID = $row["ID"];
+
+    if ($rows == 0) {
+        $sql = "INSERT INTO `time`(`StartTime`, `CompDuration`) VALUES (?,?)";
+        $stmt = $mysqli -> prepare($sql);
+        $stmt -> bind_param("ii", $StartTime, $CompDuration);
+        $stmt -> execute();
+        echo json_encode("created new");
+    } else {
+        $sql = "UPDATE `time` SET `StartTime`=?,`CompDuration`=? WHERE ID = ?";
+        $stmt = $mysqli -> prepare($sql);
+        $stmt -> bind_param("sii", $StartTime, $CompDuration, $ID);
+        $stmt -> execute();
+        echo json_encode("updated, $StartTime");
+    }
+}
+elseif (isset($req["GetTime"])){
+    $sql = "SELECT * FROM time";
+    $query = $mysqli-> query($sql);
+    $result = $query -> fetch_assoc();
+    echo json_encode($result);
 }
 
 // Get the song count in a competition

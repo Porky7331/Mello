@@ -129,8 +129,6 @@ if (isset($_POST["request"])) {
     }
 }
 
-$StartTime = isset($StartTime) ? $StartTime : $competition["StartTime"];
-$EndTime = isset($EndTime) ? $EndTime : $competition["EndTime"];
 $Location = isset($Location) ? $Location : $competition["Location"];
 
 $stmt -> close();
@@ -157,11 +155,16 @@ $stmt -> close();
             <input type="hidden" name="request" Value="updateComp">
             <input type="hidden" value="<?php echo "$comp"; ?>" name="comp">
 
-            <label>Start Time<br><input type="text" name="StartTime" value="<?php echo "$StartTime"; ?>" required></label><br><br>
-            <label>End Time<br><input type="text" name="EndTime" value="<?php echo "$EndTime"; ?>" required></label><br><br>
             <label>Location<br><input type="text" name="Location" value="<?php echo "$Location"; ?>"required></label><br><br>
             <input type="submit" value="Update">
+
         </form>
+
+        <h4>Edit Schedule:</h4>
+        <label>Start Time<br><input type="datetime-local" ID="StartTime"></label><br><br>
+        <label>Competition Duration (Hours)<br><input type="text" ID="CompDuration"></label><br><br>
+        <button onclick="setTime()">Set</button>
+        <button>Next Competition</button>
     </div>
 
     <div class="container">
