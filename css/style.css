@@ -112,14 +112,12 @@ nav {
     width: 100vw;
     height: calc(30% - 10px);
     
-    & ul {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        height: 100%;
-    }
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 
-    & ul button {
+
+    & button {
         color: white;
         background-color: rgba(0, 0, 0, 0.137);
         display: block;
@@ -236,6 +234,10 @@ iframe {
     border-radius: 10px;
 }
 
+.current-page {
+    border-bottom: solid rgba(255, 255, 255, 0.49) 4px;
+}
+
 
 *::-webkit-scrollbar {
     height: 10px;
@@ -257,6 +259,14 @@ iframe {
     background: linear-gradient(90deg, rgba(56,137,201,1) 0%, rgba(201,56,174,1) 50%, rgba(255,192,0,1) 100%);
 }
 
+.current-comp {
+    background: linear-gradient(90deg, rgb(76, 177, 255), rgba(201,56,174,1), rgba(255,192,0,1));
+    filter: saturate(1.5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
 #bg-glow {
     width: 100vw;
     top: 0;
@@ -266,4 +276,116 @@ iframe {
     position: absolute;
     background: rgba(56, 138, 201, 0.314);
     background: linear-gradient(90deg, rgba(29, 74, 108, 0.5) 0%, rgba(108, 29, 94, 0.25) 50%, rgba(115, 86, 0, 0.5) 100%);
+}
+
+#cookies-window {
+    z-index: 100;
+    width: 40vw;
+    aspect-ratio: 10 / 7;
+    background-color: rgb(153, 153, 153);
+    position: absolute;
+    top: 20vh;
+    left: auto;
+    right: auto;
+    border-radius: 30px;
+    border: rgb(77, 77, 77) solid 10px;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    
+
+    & h2 {
+        width: 100%;
+        display: block;
+        color: black;
+        font-size: 2.5vw;
+    }
+
+    & button {
+        margin: 5px;
+        padding: 5px;
+        border-radius: 5px;
+        transition: 100ms;
+        font-size: 2vw;
+        width: 15vw;
+
+        &:hover {
+            scale: 1.05;
+        }
+
+        &:active {
+            scale: 0.95;
+        }
+
+        &:first-of-type {
+            background-color: green;
+        }
+
+        &:last-of-type {
+            background-color: rgb(53, 53, 53);
+        }
+    
+    }
+
+}
+
+footer{
+    margin-top: 50px;
+    height: 150px;
+    width: 100vw;
+    background-color: rgb(51, 51, 51);
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    overflow: auto
+    
+    ;
+
+    & div {
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+#links{
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 10%;
+    width: 70%;
+
+    & a {
+        height: 25%;
+        margin-right: 5%;
+    }
+
+    & a img {
+        height: 100%;
+        width: auto;
+    }
+    
+}
+
+#kontakt{
+    margin-left: 5%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    & h2 {
+        font-size: 35px;
+        text-align: left;
+        margin-top: 10%;
+    }
+
+    & p {
+        font-size: 18px;
+        margin-top: 1%;
+    }
 }

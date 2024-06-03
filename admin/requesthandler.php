@@ -124,6 +124,13 @@ elseif (isset($req["GetTime"])){
     $result = $query -> fetch_assoc();
     echo json_encode($result);
 }
+elseif (isset($req["Vote"])){
+    $songID = $req["Vote"];
+    $sql = "UPDATE `song` SET Votes=Votes+1 WHERE ID = ?";
+    $stmt = $mysqli -> prepare($sql);
+    $stmt -> bind_param("i", $songID);
+    $stmt -> execute();
+}
 
 // Get the song count in a competition
 function compSongAmount($ID, $mysqli){

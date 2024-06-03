@@ -1,7 +1,3 @@
-function showCompetition(part = 1){
-    console.log("hello", part);
-}
-
 async function fetchData(fetchUrl, objectToSend) {
     try {
         let formData = new FormData();
@@ -42,8 +38,21 @@ function editSong(songID){
 
 async function showCompetition(index){
     comp = clamp(index, 1, 5);
+
+    let temp = [...document.getElementsByClassName("current-page")];
+    temp.forEach(e => {
+        e.classList.remove("current-page");
+    })
+
+    let title = document.querySelector("main h1");
+    title.innerHTML = comp < 5 ? "Deltävning " + comp.toString() : "Finalen";
+    console.log(title);
+
+    let navButton = [...document.getElementsByClassName("nav-button")][comp-1];
+    navButton.classList.add("current-page");
+
     displaySongs(comp);
-    getTime();
+    configTime();
 }
 
 async function newSongCard(info){
@@ -60,10 +69,10 @@ async function newSongCard(info){
     cardArtist.innerHTML = artistInfo["Name"];
     newCard.appendChild(cardArtist);
 
-    let cardVideo = document.createElement("iframe");
-    cardVideo.src = "https://youtube.com/embed/" + info["VideoURL"].split("=")[1].split("&")[0];
-    cardVideo.allowFullscreen = true;
-    newCard.appendChild(cardVideo);
+    //let cardVideo = document.createElement("iframe");
+    //cardVideo.src = "https://youtube.com/embed/" + info["VideoURL"].split("=")[1].split("&")[0];
+    //cardVideo.allowFullscreen = true;
+    //newCard.appendChild(cardVideo);
 
     let cardDesc = document.createElement("p");
     cardDesc.innerHTML = artistInfo["Description"];
@@ -71,7 +80,8 @@ async function newSongCard(info){
 
     let cardButton = document.createElement("button");
     cardButton.innerHTML = "Rösta"
-    cardButton.onclick = "vote()";
+    cardButton.onclick = function(){vote(info["ID"])}
+    //cardButton.name = info["ID"];
     cardButton.classList.add("rainbow-bg");
     newCard.appendChild(cardButton);
 
@@ -92,19 +102,96 @@ async function displaySongs(compID){
     });
 }
 
-async function getTime(){
+async function configTime(){
     console.log("add song");
     let response = JSON.parse(await fetchData("./admin/requesthandler.php", {"GetTime":true}));
     let CompDuration = response["CompDuration"];
     let StartTime = parseInt(response["StartTime"]);
     let TimePassed = (new Date).getTime() - StartTime;
 
-    let currentComp = Math.floor(TimePassed / CompDuration);
-    console.log(TimePassed, CompDuration, timeIndex)
+    let currentComp = Math.ceil(TimePassed / CompDuration);
+
+    let temp = [...document.getElementsByClassName("current-comp")];
+    temp.forEach(e => {
+        e.classList.remove("current-comp");
+    })
+    let nav = [...document.getElementsByClassName("nav-button")];
+    if (nav[currentComp-1]){
+        nav[currentComp-1].classList.add("current-comp")
+    }
+
+    console.log(nav)
+
+    // starting date
+    let timeTitle = document.querySelector("main h2");
+    if (comp < currentComp){
+        timeTitle.innerHTML = "Voting ended";
+    }
+    else if(comp > currentComp){
+        let sD = new Date(StartTime + (CompDuration*comp));
+        let temp = sD.getFullYear()+"/"+sD.getMonth()+"/"+sD.getDate();
+        temp += " "+String(sD.getHours()-1).padStart(2, "0")+":"+String(sD.getMinutes()).padStart(2, "0");
+        timeTitle.innerHTML = "Begins "+ temp;
+    }
+    else if(comp == currentComp){
+        let sD = new Date(StartTime + (CompDuration*(comp+1)));
+        let temp = sD.getFullYear()+"/"+sD.getMonth()+"/"+sD.getDate();
+        temp += " "+String(sD.getHours()-1).padStart(2, "0")+":"+String(sD.getMinutes()).padStart(2, "0");
+        timeTitle.innerHTML = "Voting until "+temp;
+    } 
 }
 
+async function vote(songID){
+    if (!localStorage.getItem("Cookies")){return;}
+    let Votes = !isNaN(localStorage.getItem("Votes")) ? parseInt(localStorage.getItem("Votes") ) : MAXVOTES;
+
+    let refillVotes = false
+    let lastComp = localStorage.getItem("lastComp")
+    // If lastComp isnt a number
+    if (isNaN(lastComp)){
+        console.log("no comp, refilling")
+        localStorage.setItem("lastComp", comp);
+        refillVotes = true;
+    // If lastComp is a number
+    } else if (!isNaN(lastComp)){
+        if (parseInt(lastComp) < comp){
+            console.log("smaller comp, refilling")
+            refillVotes = true;
+        }
+        console.log("as normal")
+        localStorage.setItem("lastComp", comp)
+    }
+    Votes = refillVotes ? MAXVOTES : Votes
+    if (Votes >= MAXVOTES) {
+        console.log("limit vote REACHED");
+        return;
+    }
+
+    await fetchData("./admin/requesthandler.php", {"Vote":songID});
+    localStorage.setItem("Votes", Votes+1);
+}
+
+function acceptCookies(){
+    localStorage.setItem("Cookies", "true");
+    hideCookiesDisplay();
+}
+
+function hideCookiesDisplay(){
+    cookiesWindow.style.display = "none";
+}
+
+var cookiesWindow = document.getElementById("cookies-window");
+if (localStorage.getItem("Cookies")){
+    cookiesWindow.style.display = "none";
+}
+
+
+// REMOVE WHEN DONE
+localStorage.setItem("Votes", null);
+
 var comp = 1
-displaySongs(comp)
+const MAXVOTES = 3
+showCompetition(comp);
 
 var mobile = false;
 if (document.body.clientHeight > document.body.clientWidth){
