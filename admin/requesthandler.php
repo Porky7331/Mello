@@ -30,7 +30,7 @@ if (isset($req["songCount"])){
 elseif (isset($req["addSong"])){
     $compID = $req["addSong"];
     $count = compSongAmount($compID, $mysqli);
-    if (intval($count) >= 6) {
+    if (intval($count) >= 6 || $compID > 4) {
         echo json_encode("limitReached");
         exit();
     }
@@ -123,6 +123,58 @@ elseif (isset($req["GetTime"])){
     $query = $mysqli-> query($sql);
     $result = $query -> fetch_assoc();
     echo json_encode($result);
+}
+elseif (isset($req["Vote"])){
+    $songID = $req["Vote"];
+    if ($req["Final"]){
+        $sql = "UPDATE `song` SET FinalVotes=FinalVotes+1 WHERE ID = ?";
+    } else {
+        $sql = "UPDATE `song` SET Votes=Votes+1 WHERE ID = ?";
+    }
+    
+    $stmt = $mysqli -> prepare($sql);
+    $stmt -> bind_param("i", $songID);
+    $stmt -> execute();
+}
+elseif (isset($req["GetTopSongs"])){
+    $sql = "SELECT * FROM song ORDER BY Votes DESC";
+    $stmt = $mysqli -> prepare($sql);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
+    $array = $result->fetch_all(MYSQLI_ASSOC);
+    
+    $finalists = array();
+    for ($i = 1; $i <= 4; $i++) {
+        $added = 0;
+        foreach ($array as $song) {
+            if ($added >= 2) {continue;}
+            if ($song["Competition"]==$i){
+                $added += 1;
+                $finalists[] = $song;
+            }
+          }
+    }
+    echo json_encode($finalists);
+}
+elseif (isset($req["GetWinner"])){
+    $sql = "SELECT * FROM song ORDER BY Votes DESC";
+    $stmt = $mysqli -> prepare($sql);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
+    $array = $result->fetch_all(MYSQLI_ASSOC);
+    
+    $finalists = array();
+    for ($i = 1; $i <= 4; $i++) {
+        $added = 0;
+        foreach ($array as $song) {
+            if ($added >= 2) {continue;}
+            if ($song["Competition"]==$i){
+                $added += 1;
+                $finalists[] = $song;
+            }
+          }
+    }
+    echo json_encode($finalists);
 }
 
 // Get the song count in a competition

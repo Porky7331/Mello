@@ -72,7 +72,7 @@ async function addSong(){
     let response = await fetchData("../admin/requesthandler.php", {"addSong":comp});
     if (JSON.parse(response) == "limitReached"){
         console.log("LIMIIIT");
-        alert("Limit reached (max 6 songs)");
+        alert("Song Limit reached");
     } 
     songList();
 }
@@ -82,7 +82,13 @@ async function songList(){
     div.innerHTML = "";
     pickCompDiv.innerHTML = "";
     
-    let response = await fetchData("../admin/requesthandler.php", {"getCompSongs":comp});
+    let response;
+    if (comp <= 4){
+        response = await fetchData("../admin/requesthandler.php", {"getCompSongs":comp});
+    } else{
+        response = await fetchData("../admin/requesthandler.php", {"GetTopSongs":comp});
+    }
+    
     let songs = JSON.parse(response);
     songs.forEach(song => {
         let newButton = document.createElement('button');
@@ -116,10 +122,6 @@ function pickComp(val){
     loadTime();
 }
 
-function secondsSinceEpoch(d){  
-    return (d);  
-}
-
 async function loadTime(){
     try {
         let response = JSON.parse(await fetchData("../admin/requesthandler.php", {"GetTime":true}));
@@ -139,7 +141,7 @@ async function loadTime(){
         // dd
         dateString += String(date.getMinutes()).padStart(2, '0');
 
-        CompDuration.value = parseInt(response["CompDuration"]) / 3600;
+        CompDuration.value = parseInt(response["CompDuration"]) / 3600000;
         StartTime.value = dateString;
 
     } catch (error) {
@@ -148,6 +150,7 @@ async function loadTime(){
     }  
 }
 
+// Set start time and duration for each competition
 async function setTime(){
     try {
         let StartTime = document.querySelector("#StartTime").value;

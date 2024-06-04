@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="https://imgur.com/D8BkTOR.png">
     <script src="js/script.js" defer></script>
     <title>Melodifestivalen 2025</title>
 </head>
@@ -18,16 +19,20 @@
         </div>
         
         <nav>
-            <ul>
-                <button onclick="showCompetition(1)">Deltävling 1</button>
-                <button onclick="showCompetition(2)">Deltävling 2</button>
-                <button onclick="showCompetition(3)">Deltävling 3</button>
-                <button onclick="showCompetition(4)">Deltävling 4</button>
-                <button onclick="showCompetition(5)">Final</button>
-            </ul>
+            <button class="nav-button" onclick="showCompetition(1)">Deltävling 1</button>
+            <button class="nav-button" onclick="showCompetition(2)">Deltävling 2</button>
+            <button class="nav-button" onclick="showCompetition(3)">Deltävling 3</button>
+            <button class="nav-button" onclick="showCompetition(4)">Deltävling 4</button>
+            <button class="nav-button" onclick="showCompetition(5)">Final</button>
         </nav>
     </header>
+    <div id="cookies-window">
+        <h2>Accept cookies to vote:</h2>
+        <button onclick="acceptCookies()" class="rainbow-bg">Accept cookies</button>
+        <button onclick="hideCookiesDisplay()">Decline cookies</button>
+    </div>
     <main class="gradient">
+        <p id="votes-left" class="rainbow-text">Votes left: 3</p>
         <h1 class="">Deltävling 1</h1>
         <h3 class="">20:15:23</h3>
         <h2>Antal Röster: 3</h2>
@@ -43,5 +48,20 @@
             </div>
         </section>
     </main>
+
+    <footer>
+        <div id="kontakt">
+            <h2>Kontakta oss</h2>
+            <p>Mail: Exemple.ex@google.com</p>
+            <p>Telefon: 000000000</p>
+        </div>
+        <div id="links">
+            <a href="https://www.facebook.com/melodifestivalen/"><img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/facebook-app-round-white-icon.png" alt="facebook"></a>
+            <a href="https://www.instagram.com/melodifestivalen/"><img src="https://awareak.org/wp-content/uploads/2023/07/CITYPNG.COMHD-White-Instagram-Round-Logo-Icon-PNG-1600x1200-1.png" alt="instagram"></a>
+            <a href="https://www.svtplay.se/melodifestivalen"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/SVT_Play_logotyp.svg" alt="svt"></a>
+            <a href="https://www.youtube.com/MelodifestivalenSVT"><img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/youtube-app-white-icon.png" alt="youtube"></a>
+        </div>
+    </footer>
+
 </body>
 </html>
