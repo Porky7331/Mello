@@ -1,3 +1,8 @@
+* {
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 body{
     margin: 0px;
     height: 100vh;
@@ -5,6 +10,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background-color: rgb(37, 37, 37);
 }
 
@@ -44,17 +50,16 @@ input {
     margin-bottom: 3%;
 }
 label {
-    font-size: 300%;
+    font-size: 150%;
+    color: white;
 }
 #login{
     width: auto;
     height: auto;
     font-size: 150%;
 }
-#melotitle{
-width: 75%;
-}
-#melotitle img{
+
+img{
     width: 30%;
     height: auto;
     filter: brightness(0) invert(1);
