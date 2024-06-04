@@ -1,19 +1,23 @@
 async function fetchData(fetchUrl, objectToSend) {
     try {
+        // Create formdata with objectToSend
         let formData = new FormData();
         for (let key in objectToSend) {
             formData.append(key, objectToSend[key]);
         }
         
+        // Wait for response
         let response = await fetch(fetchUrl, {
             method: "POST",
             body: formData
         });
 
+        // If problem with response
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
 
+        // Retrieve respone and return
         var resultFromPHP = await response.text();
         return resultFromPHP;
         
@@ -37,14 +41,17 @@ function clamp(val, min, max){
 async function showCompetition(index){
     comp = clamp(index, 1, 5);
 
+    // Clear previous elements
     let temp = [...document.getElementsByClassName("current-page")];
     temp.forEach(e => {
         e.classList.remove("current-page");
     })
 
+    // Change title text
     let title = document.querySelector("main h1");
     title.innerHTML = comp < 5 ? "Deltävning " + comp.toString() : "Finalen";
 
+    // Change nav appearance
     let navButton = [...document.getElementsByClassName("nav-button")][comp-1];
     navButton.classList.add("current-page");
 
@@ -63,6 +70,10 @@ async function newSongCard(info, final=false){
 
     let newCard = document.createElement("div");
     newCard.classList.add("artist-card");
+    // Make card wider if on mobile
+    if (mobile){
+        newCard.style.width = "90%";
+    }
 
     let cardTitle = document.createElement("h3");
     cardTitle.innerHTML = info["SongName"];
@@ -84,6 +95,7 @@ async function newSongCard(info, final=false){
     cardSection.appendChild(newCard);
 
     let currentComp = await getCurrentComp()
+    // If current comp is active
     if (comp == currentComp){
         let cardButton = document.createElement("button");
         cardButton.innerHTML = "Rösta"
@@ -92,7 +104,8 @@ async function newSongCard(info, final=false){
         cardDesc.innerHTML = artistInfo["Description"];
 
         newCard.appendChild(cardButton);
-    } else if(comp < currentComp && comp < 5) {
+    } // If current comp is yet to be active
+    else if(comp < currentComp && comp < 5) {
         let finalists = JSON.parse(await fetchData("./admin/requesthandler.php", {"GetTopSongs":true}));
         newCard.style.filter = "grayscale(1)"
         finalists.forEach(song => {
@@ -102,7 +115,8 @@ async function newSongCard(info, final=false){
                 return
             }
         });
-    } else if (comp < currentComp && comp == 5) {
+    } // If comp has passed and is final
+    else if (comp < currentComp && comp == 5) {
         let finalists = JSON.parse(await fetchData("./admin/requesthandler.php", {"GetTopSongs":true}));
         let winner = true;
         finalists.forEach(song => {
@@ -111,6 +125,7 @@ async function newSongCard(info, final=false){
                 return;
             }
         });
+        // If artistcard has won the finals
         if (winner){
             newCard.classList.add("winner");
             cardSection.insertBefore(newCard, cardSection.firstChild);
@@ -125,6 +140,7 @@ async function newSongCard(info, final=false){
     }
 }
 
+// Remove all current song cards
 function clearSongCards(){
     let cards = document.getElementsByClassName("artist-card");
     [...cards].forEach(e => {
@@ -132,7 +148,7 @@ function clearSongCards(){
     });
 }
 
-
+// Display relavent song
 async function displaySongs(compID){
     clearSongCards();
     if (compID > await getCurrentComp()){
@@ -144,6 +160,7 @@ async function displaySongs(compID){
     });
 }
 
+// Get what comp is currently active
 async function getCurrentComp(){
     let response = JSON.parse(await fetchData("./admin/requesthandler.php", {"GetTime":true}));
     let CompDuration = response["CompDuration"];
@@ -152,6 +169,7 @@ async function getCurrentComp(){
     let currentComp = Math.ceil(TimePassed / CompDuration);
     return currentComp;
 }
+
 
 async function configTime(){
     let response = JSON.parse(await fetchData("./admin/requesthandler.php", {"GetTime":true}));
@@ -192,10 +210,7 @@ async function configTime(){
     } 
 }
 
-// MAKE IT SO THAT THE USERS VOTE RESET IF STARTTIME IS CHANGED
-// I REPEAT
-// DO WHAT I SAID
-
+// Show how many votes user has + refill them in certain cases
 async function displayVotes(){
     let votesLeft = document.getElementById("votes-left");
 
@@ -300,16 +315,10 @@ var comp = 1;
 loadComp();
 const MAXVOTES = 3;
 
+// Detect if site is on mobile
 var mobile = false;
 if (document.body.clientHeight > document.body.clientWidth){
     mobile = true;
-}
-
-if (mobile) {
-    var artistCards = [...document.getElementsByClassName("artist-card")];
-    artistCards.forEach(element => {
-    element.style.width = "90%";
-});
 }
 
 //var body = document.body,

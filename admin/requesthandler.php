@@ -22,11 +22,13 @@ $stmt -> bind_param("ss", $_SESSION["Username"], $_SESSION["Password"]);
 $stmt -> execute();
 $account = $stmt -> get_result() -> fetch_assoc();
 
+// Get how many songs there are in a comp
 if (isset($req["songCount"])){
     $compID = $req["songCount"];
     $count = compSongAmount($compID, $mysqli);
     echo json_encode("$count");
 }
+// Add new song
 elseif (isset($req["addSong"])){
     $compID = $req["addSong"];
     $count = compSongAmount($compID, $mysqli);
@@ -48,6 +50,7 @@ elseif (isset($req["addSong"])){
 
     echo json_encode("success");
 }
+// Get all songs from a comp
 elseif (isset($req["getCompSongs"])){
     $compID = $req["getCompSongs"];
 
@@ -60,6 +63,7 @@ elseif (isset($req["getCompSongs"])){
 
     echo json_encode($artistArray);
 }
+// Get an artist from its ID
 elseif (isset($req["getArtistFromID"])){
     $artistID = $req["getArtistFromID"];
 
@@ -71,6 +75,7 @@ elseif (isset($req["getArtistFromID"])){
     
     echo json_encode($result);
 }
+// Edit a song
 elseif (isset($req["editSong"])){
     $sql = "UPDATE `song` SET `SongName`=?,`VideoURL`=?,`Votes`=? WHERE ID = ?";
     $stmt = $mysqli -> prepare($sql);
@@ -82,6 +87,7 @@ elseif (isset($req["editSong"])){
     $stmt -> bind_param("ssi", $req["ArtistName"], $req["ArtistDescription"], $req["ArtistID"]);
     $stmt -> execute();
 }
+// Delete a song
 elseif (isset($req["deleteSong"])){
     $sql = "DELETE FROM `song` WHERE ID = ?";
     $stmt = $mysqli -> prepare($sql);
@@ -93,10 +99,10 @@ elseif (isset($req["deleteSong"])){
     $stmt -> bind_param("i", $req["ArtistID"]);
     $stmt -> execute();
 }
+// Set the time of comp start and duration
 elseif (isset($req["SetTime"])){
     $StartTime = $req["StartTime"];
     $CompDuration = $req["CompDuration"];
-    //INSERT INTO `time`(`StartTime`, `CompDuration`) VALUES ('0','0')
 
     $sql = "SELECT * FROM time";
     $result = $mysqli -> query($sql);
@@ -118,12 +124,14 @@ elseif (isset($req["SetTime"])){
         echo json_encode("updated, $StartTime");
     }
 }
+// Get time saved in database
 elseif (isset($req["GetTime"])){
     $sql = "SELECT * FROM time";
     $query = $mysqli-> query($sql);
     $result = $query -> fetch_assoc();
     echo json_encode($result);
 }
+// Vote for a song
 elseif (isset($req["Vote"])){
     $songID = $req["Vote"];
     if ($req["Final"]){
@@ -136,27 +144,8 @@ elseif (isset($req["Vote"])){
     $stmt -> bind_param("i", $songID);
     $stmt -> execute();
 }
+// Get the song qualafied for the finals
 elseif (isset($req["GetTopSongs"])){
-    $sql = "SELECT * FROM song ORDER BY Votes DESC";
-    $stmt = $mysqli -> prepare($sql);
-    $stmt -> execute();
-    $result = $stmt -> get_result();
-    $array = $result->fetch_all(MYSQLI_ASSOC);
-    
-    $finalists = array();
-    for ($i = 1; $i <= 4; $i++) {
-        $added = 0;
-        foreach ($array as $song) {
-            if ($added >= 2) {continue;}
-            if ($song["Competition"]==$i){
-                $added += 1;
-                $finalists[] = $song;
-            }
-          }
-    }
-    echo json_encode($finalists);
-}
-elseif (isset($req["GetWinner"])){
     $sql = "SELECT * FROM song ORDER BY Votes DESC";
     $stmt = $mysqli -> prepare($sql);
     $stmt -> execute();

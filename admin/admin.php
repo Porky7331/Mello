@@ -40,7 +40,6 @@ if (!$account){
     header("Location: index.php");
 }
 
-
 $stmt -> close();
 ?>
 

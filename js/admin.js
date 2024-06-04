@@ -1,19 +1,23 @@
 async function fetchData(fetchUrl, objectToSend) {
     try {
+        // Create formdata with objectToSend
         let formData = new FormData();
         for (let key in objectToSend) {
             formData.append(key, objectToSend[key]);
         }
         
+        // Wait for response
         let response = await fetch(fetchUrl, {
             method: "POST",
             body: formData
         });
 
+        // If problem with response
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
 
+        // Retrieve respone and return
         var resultFromPHP = await response.text();
         return resultFromPHP;
         
@@ -22,6 +26,7 @@ async function fetchData(fetchUrl, objectToSend) {
     }
 }
 
+// Delete song
 async function deleteSong(){
     if (confirm("Are you sure?")) {
         let sendData = {};
@@ -34,6 +39,7 @@ async function deleteSong(){
     }
 }
 
+// Edit song
 async function editSong(){
     let sendData = {};
     sendData.SongID = currentSongID;
@@ -48,6 +54,7 @@ async function editSong(){
     songList();
 }
 
+// Bring up section to edit songs
 async function showEditSong(songID, SongName, VideoURL, Votes, ArtistID){
     editSongSection.classList.remove("hidden");
     let response = await fetchData("../admin/requesthandler.php", {"getCompSongs":comp});
@@ -68,15 +75,16 @@ async function showEditSong(songID, SongName, VideoURL, Votes, ArtistID){
     currentArtistID = ArtistID;
 }
 
+// Add new song
 async function addSong(){
     let response = await fetchData("../admin/requesthandler.php", {"addSong":comp});
-    if (JSON.parse(response) == "limitReached"){
-        console.log("LIMIIIT");
+    if (JSON.parse(response) == "limitReached"){;
         alert("Song Limit reached");
     } 
     songList();
 }
 
+// Display all songs in currently selected comp
 async function songList(){
     let div = document.getElementsByClassName("songListDiv")[0];
     div.innerHTML = "";
@@ -115,6 +123,7 @@ function clamp(val, min, max){
     return val;
 }
 
+// Pick what competition to edit
 function pickComp(val){
     comp = clamp(val, 1, 5);
     editSongSection.classList.add("hidden");
@@ -122,6 +131,7 @@ function pickComp(val){
     loadTime();
 }
 
+// Load time setting saved
 async function loadTime(){
     try {
         let response = JSON.parse(await fetchData("../admin/requesthandler.php", {"GetTime":true}));
